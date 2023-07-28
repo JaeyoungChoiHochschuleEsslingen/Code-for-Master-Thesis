@@ -1,0 +1,464 @@
+# Mounting Google drive where dataset is saved
+from google.colab import drive
+import os
+
+drive.mount('/content/drive')
+os.getcwd()
+
+################################################################################################################################################################################################
+# Extract all images into the designated path
+!pip install pyunpack
+!pip install patool
+
+from pyunpack import Archive
+
+Archive('/content/drive/MyDrive/Final_Experiment/Heiko2.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/Eda2.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/Sanghwa2.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/Enriko2.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/Lesia2.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/Mohamad2.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/Test_6.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/Channa2.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/Christian2.7z').extractall("/content/drive/MyDrive/Final_Experiment")
+Archive('/content/drive/MyDrive/Final_Experiment/David2.7z').extractall("/content/drive/MyDrive/Final_Experiment
+
+################################################################################################################################################################################################
+# Change all extension of images bmp -> jpg (defalut extension of image from test setup is bmp), (jpg is the defalut extension for deep learning training)
+import os
+import glob
+
+dir_path = '/content/drive/MyDrive/Final_Experiment'
+
+for (root, directories, files) in os.walk(dir_path):
+  for d in directories:
+    d_path = os.path.join(root,d)
+
+    files_image = glob.glob(d_path + '/*.bmp')
+
+    #length check#
+    print(len(files_image))
+
+    #change extensions#
+    for name in files_image:
+     if not os.path.isdir(name):
+        src = os.path.splitext(name)
+        os.rename(name, src[0] + '.jpg')
+        
+##Check whether all files are successfully changed##
+for (root, directories, files) in os.walk(dir_path):
+
+  for file in files:
+    file_path = os.path.join(root,file)
+     #print(file_path)
+
+
+################################################################################################################################################################################################
+# Selecting only 100 images per behaviour randomly. Then move those images to designated path. 
+
+import os
+import random
+from PIL import Image
+import shutil
+
+'''
+# Set the path to the directory containing the sub-directories
+parent_dirs = ["/content/drive/MyDrive/Final_Experiment/ThesisDataSet/Calling",
+               "/content/drive/MyDrive/Final_Experiment/ThesisDataSet/Drinking",
+              "/ccontent/drive/MyDrive/Final_Experiment/ThesisDataSet/Drowsiness",
+              "/content/drive/MyDrive/Final_Experiment/ThesisDataSetr/Infotainment",
+              "/content/drive/MyDrive/Final_Experiment/ThesisDataSet/LookingBack",
+              "/content/drive/MyDrive/Final_Experiment/ThesisDataSet/Normal",
+              "/ccontent/drive/MyDrive/Final_Experiment/ThesisDataSet/Phone",
+              "/content/drive/MyDrive/Final_Experiment/ThesisDataSet/PickingUp",
+              "/content/drive/MyDrive/Final_Experiment/ThesisDataSet/TalkingPassenger",
+              ]
+
+paths = []
+labels = []
+
+# Loop through each parent directory
+for parent_dir in parent_dirs:
+    subdirs = [d for d in os.listdir(parent_dir) if os.path.isdir(os.path.join(parent_dir,d))]
+    
+    
+    # Loop through each sub-directory
+    for subdir in subdirs:
+        subdir_path = os.path.join(parent_dir, subdir)
+        # Get a list of all the image files in the sub-directory
+        image_files = [f for f in os.listdir(subdir_path) if f.endswith(".jpg")]
+
+
+        # Randomly select multiple image files from the list
+        selected_files = random.sample(image_files, k=100)
+        
+        length_of_selected_files = len(selected_files)
+        
+
+        # Check name
+        for i in range(0,100):
+          selected_file_path = subdir_path + '/' + selected_files[i]
+          
+          Category_of_each_selected_files = selected_file_path.split('/')[-3]
+
+          if Category_of_each_selected_files == 'Calling':
+            shutil.move(selected_file_path,'/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/Calling')
+          
+          elif Category_of_each_selected_files == 'Drinking':
+            shutil.move(selected_file_path,'/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/Drinking')
+
+          elif Category_of_each_selected_files == 'Drowsiness':
+            shutil.move(selected_file_path,'/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/Drowsiness')
+
+          elif Category_of_each_selected_files == 'Infotainment':
+            shutil.move(selected_file_path,'/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/Infotainment')
+
+          elif Category_of_each_selected_files == 'LookingBack':
+            shutil.move(selected_file_path,'/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/LookingBack')
+          
+          elif Category_of_each_selected_files == 'Normal':
+            shutil.move(selected_file_path,'/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/Normal')
+
+          elif Category_of_each_selected_files == 'Phone':
+            shutil.move(selected_file_path,'/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/Phone')
+
+          elif Category_of_each_selected_files == 'PickingUp':
+            shutil.move(selected_file_path,'/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/PickingUp')
+
+          elif Category_of_each_selected_files == 'TalkingPassenger':
+            shutil.move(selected_file_path,'/ccontent/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel/TalkingPassenger')
+            '''
+
+################################################################################################################################################################################################
+#labelling dataset depending on the the folder name where each data is located
+#Each image turns into a dataframe that has 2 parameters (file, label)
+import pandas as pd
+
+paths = []
+train_labels = []
+
+for dirname, _, filenames in os.walk('/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel'):
+    for filename in filenames:
+        print(os.path.join(dirname, filename))
+        if '.jpg' in filename:
+            file_path = dirname + '/' + filename
+            paths.append(file_path)
+
+        if 'Normal' in file_path:
+            train_labels.append('Normal')
+        elif 'Phone' in file_path:
+            train_labels.append('Phone')
+        elif 'Calling' in file_path:
+            train_labels.append('Calling')
+        elif 'Drinking' in file_path:
+            train_labels.append('Drinking')
+        elif 'Drowsiness' in file_path:
+            train_labels.append('Drowsiness')
+        elif 'Infotainment' in file_path:
+            train_labels.append('Infotainment')
+        elif 'LookingBack' in file_path:
+            train_labels.append('LookingBack')
+        elif 'PickingUp' in file_path:
+            train_labels.append('PickingUp')
+        elif 'TalkingPassenger' in file_path:
+            train_labels.append('TalkingPassenger')
+
+for dirname, _, filenames in os.walk('/content/drive/MyDrive/Final_Experiment/ThesisDataSet_BackUp'):
+    for filename in filenames:
+        print(os.path.join(dirname, filename))
+        if '.jpg' in filename:
+            file_path = dirname + '/' + filename
+            paths.append(file_path)
+
+        if 'Normal' in file_path:
+            train_labels.append('Normal')
+        elif 'Phone' in file_path:
+            train_labels.append('Phone')
+        elif 'Calling' in file_path:
+            train_labels.append('Calling')
+        elif 'Drinking' in file_path:
+            train_labels.append('Drinking')
+        elif 'Drowsiness' in file_path:
+            train_labels.append('Drowsiness')
+        elif 'Infotainment' in file_path:
+            train_labels.append('Infotainment')
+        elif 'LookingBack' in file_path:
+            train_labels.append('LookingBack')
+        elif 'PickingUp' in file_path:
+            train_labels.append('PickingUp')
+        elif 'TalkingPassenger' in file_path:
+            train_labels.append('TalkingPassenger')
+
+data_df = pd.DataFrame({'path': paths, 'label': train_labels})
+print('data_df shape:', data_df.shape)
+
+print(data_df['path'].value_counts())
+print(data_df['label'].value_counts())
+
+
+################################################################################################################################################################################################
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+# location of the dataset
+train_path = '/content/drive/MyDrive/Final_Experiment/ThesisDataSet_Sel'
+validation_path = '/content/drive/MyDrive/Final_Experiment/ThesisDataSet_BackUp'
+
+# Setting data generator, some images are subject for image augmentation (horizontal filp, shear, zoom) for better trainings.
+train_data_generator = ImageDataGenerator(horizontal_flip=True, rescale=1./255, shear_range = 0.2, zoom_range=0.2)
+validation_data_generator = ImageDataGenerator(horizontal_flip=True, rescale=1./255, shear_range = 0.2, zoom_range=0.2)
+
+# Generating dataset for training
+train_flow_gen = train_data_generator.flow_from_directory(
+    train_path,
+    target_size=(224, 224),  # change image size as an input
+    batch_size=32,  
+    class_mode='categorical',  
+    shuffle=True  
+)
+
+# Generating dataset for validation
+valid_flow_gen = validation_data_generator.flow_from_directory(
+    validation_path,
+    target_size=(224, 224),
+    batch_size=32,
+    class_mode='categorical',
+    shuffle=True
+)
+
+
+
+################################################################################################################################################################################################
+#Checking if the dataset has right format as an input data for training
+#Dataset should have folloing form : (32, 224, 224, 3) (32, 9) 32batsize, 224x224 image size, 3colors for RGB, 9 categories (9distracted bebaviours)
+
+train_images_array, train_labels_array = next(train_flow_gen)
+val_images_array, val_labels_array = next(valid_flow_gen)
+print(train_images_array.shape, train_labels_array.shape)
+print(val_images_array.shape, val_labels_array.shape)
+print(train_images_array[:1], train_labels_array[:1])
+print(val_images_array[:1], val_labels_array[:1])
+
+################################################################################################################################################################################################
+IMAGE_SIZE = 224
+BATCH_SIZE = 32
+
+################################################################################################################################################################################################
+#Importing pre-trainded models. Model can be selected here. (VGG16, ResNet50, Xception)
+
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Input, Dense , Conv2D , Dropout , Flatten , Activation, MaxPooling2D , GlobalAveragePooling2D
+from tensorflow.keras.optimizers import Adam , RMSprop
+from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.callbacks import ReduceLROnPlateau , EarlyStopping , ModelCheckpoint , LearningRateScheduler
+from tensorflow.keras.applications.vgg16 import VGG16
+from tensorflow.keras.applications import ResNet50V2
+from tensorflow.keras.applications import Xception
+
+def create_model(model_name='vgg16', verbose=False):
+    
+    input_tensor = Input(shape=(IMAGE_SIZE, IMAGE_SIZE, 3))
+    if model_name == 'vgg16':
+        base_model = VGG16(input_tensor=input_tensor, include_top=False, weights='imagenet')
+    elif model_name == 'resnet50':
+        base_model = ResNet50V2(input_tensor=input_tensor, include_top=False, weights='imagenet')
+    elif model_name == 'xception':
+        base_model = Xception(input_tensor=input_tensor, include_top=False, weights='imagenet')
+
+    bm_output = base_model.output
+
+    x = GlobalAveragePooling2D()(bm_output)
+    if model_name != 'vgg16':
+        x = Dropout(rate=0.5)(x)
+    x = Dense(50, activation='relu', name='fc1')(x)
+    
+    output = Dense(9, activation='softmax', name='output')(x)
+
+    model = Model(inputs=input_tensor, outputs=output)
+
+    if verbose:
+        model.summary()
+
+    return model
+
+################################################################################################################################################################################################
+#Creating model and setting hyper-parameters in advance the training
+
+model = create_model(model_name='vgg16', verbose=True)
+model.compile(optimizer=Adam(learning_rate=0.0001), loss='categorical_crossentropy', metrics=['accuracy'])
+
+################################################################################################################################################################################################
+# Actual training. Trained model is saved after per epoch, number of epoch is decided here.  
+
+from keras.callbacks import ModelCheckpoint
+
+checkpoint_path = '/content/drive/MyDrive/Final_Experiment/VGG16_Final_{epoch:02d}.h5'
+checkpoint_cb = ModelCheckpoint(filepath=checkpoint_path, save_weights_only=False, save_best_only=False, verbose=1)
+
+
+history = model.fit(train_flow_gen, epochs=5,
+                    #steps_per_epoch=int(np.ceil(tr_images.shape[0]/BATCH_SIZE)),
+                    validation_data=valid_flow_gen,
+                    #validation_steps=int(np.ceil(val_images.shape[0]/BATCH_SIZE)),
+                    callbacks=[checkpoint_cb]
+                   )
+
+################################################################################################################################################################################################
+# To load the saved trained model from my Google-drive, continuing after the saved trained model is also possible.
+'''
+from keras.models import load_model
+
+# Pathe the saved trained model is located
+checkpoint_path = '/content/drive/MyDrive/Final_Experiment/VGG16_Final_{epoch:02d}.h5'
+
+
+# Load the trained model
+for epoch in range(1, 3):
+    model_path = checkpoint_path.format(epoch=epoch)
+    loaded_model = load_model(model_path)
+    model.set_weights(loaded_model.get_weights())
+
+# Do additonal training and save.
+
+checkpoint_path = '/content/drive/MyDrive/Final_Experiment2/Xception_jinjinjara_{epoch:02d}.h5'
+checkpoint_cb = ModelCheckpoint(filepath=checkpoint_path, save_weights_only=False, save_best_only=False, verbose=1)
+
+history = model.fit(train_flow_gen, epochs=5,
+                    validation_data=valid_flow_gen,
+                    callbacks=[checkpoint_cb]
+'''
+)
+
+################################################################################################################################################################################################
+# Evauating the model's accuaracy and loss after the training session
+
+model.evaluate(valid_flow_gen)
+
+################################################################################################################################################################################################
+# Creating the confusion matrix. All of validation dataset is loaded then is used for prediction 
+
+from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
+import itertools
+import numpy as np
+
+def plot_confusion_matrix(cm, classes, normalize=False, title='Confusion Matrix', cmap=plt.cm.Blues, fontsize=8):
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45, fontsize=fontsize)
+    plt.yticks(tick_marks, classes, fontsize=fontsize)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, "{:.2f}%".format(cm[i, j] * 100), horizontalalignment='center', color='white' if cm[i, j] > thresh else 'black', fontsize=fontsize)
+
+    plt.tight_layout()
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+# Creating images array and label array for the prediction
+val_images_array = []
+val_labels_array = []
+
+# Prediction 
+for val_images_batch, val_labels_batch in valid_flow_gen:
+    predictions = model.predict(val_images_batch)
+    predicted_labels = np.argmax(predictions, axis=1)
+    true_labels = np.argmax(val_labels_batch, axis=1)
+
+    val_images_array.extend(val_images_batch)
+    val_labels_array.extend(val_labels_batch)
+
+    if len(val_images_array) >= len(valid_flow_gen.classes):
+        break
+
+# Creating the confusion matrix
+val_images_array = np.array(val_images_array)
+val_labels_array = np.array(val_labels_array)
+predicted_labels = np.argmax(model.predict(val_images_array), axis=1)
+true_labels = np.argmax(val_labels_array, axis=1)
+confusion_mtx = confusion_matrix(true_labels, predicted_labels)
+
+# chagne the form inth % basis
+confusion_mtx_percent = confusion_mtx.astype('float') / confusion_mtx.sum(axis=1)[:, np.newaxis]
+
+# Visualisation of the confusion matrix
+plot_confusion_matrix(confusion_mtx_percent, classes=range(9), normalize=True)
+plt.show()
+
+################################################################################################################################################################################################
+# Creating the Grad-CAM
+
+import cv2
+import numpy as np
+import tensorflow as tf
+
+def generate_grad_cam_batch(model, images, layer_name):
+    
+    grad_model = tf.keras.models.Model([model.inputs], [model.get_layer(layer_name).output, model.output])
+    with tf.GradientTape() as tape:
+        conv_outputs, predictions = grad_model(images)
+        losses = [predictions[i, np.argmax(predictions[i])] for i in range(len(images))]
+
+    # Calculating the gradient for prediction classe
+    grads_batch = tape.gradient(losses, conv_outputs)
+
+    # Creating heatmap based on image and gradient value
+    heatmaps_batch = []
+    for i in range(len(images)):
+        grads = grads_batch[i]
+        weights = np.mean(grads, axis=(0, 1))
+        cam = np.dot(conv_outputs[i], weights)
+        cam = cv2.resize(cam, (images.shape[2], images.shape[1]))
+        cam = np.maximum(cam, 0)
+        heatmap = cam / np.max(cam)
+        heatmaps_batch.append(heatmap)
+
+    # Visualisation of images overlaying Grad-CAM heatmap
+    overlay_batch = []
+    for i in range(len(images)):
+      enlarged_image = cv2.resize(images[i], (images.shape[2] * 4, images.shape[1] * 4))
+
+      overlay = cv2.cvtColor(enlarged_image.astype('float32'), cv2.COLOR_RGB2BGR)
+      overlay = cv2.resize(overlay, (heatmaps_batch[i].shape[1], heatmaps_batch[i].shape[0]))
+      overlay[..., 0] = 255 * heatmaps_batch[i]
+      overlay[..., 1] = 0
+      overlay[..., 2] = 255 * (1 - heatmaps_batch[i])
+      overlay_batch.append(overlay)
+
+    return overlay_batch, heatmaps_batch
+
+################################################################################################################################################################################################
+%matplotlib inline
+class_names = ['Calling', 'Drinking', 'Drowsiness', 'Infotainment', 'LookingBack',
+       'Normal', 'Phone', 'PickingUp', 'TalkingPassenger']
+
+# Selecting images batches to apply Grad-CAM
+batch_index = 0
+batch_size = 32 
+num_batches = 15  
+
+plt.figure(figsize=(90, 60))
+for i in range(num_batches):
+    image_batch = val_images_array[batch_index : batch_index + batch_size]
+    true_labels_batch = np.argmax(val_labels_array[batch_index : batch_index + batch_size], axis=1)
+
+    # Grad-CAM 생성
+    overlay_batch, heatmaps_batch = generate_grad_cam_batch(model, image_batch, layer_name='block5_pool')
+
+    for j in range(batch_size):
+        plt.subplot(num_batches, batch_size, i * batch_size + j + 1)  # 배치 이미지를 그리드 형태로 표시
+        plt.imshow(image_batch[j])
+        plt.imshow(heatmaps_batch[j], cmap='jet', alpha=0.5)
+        plt.title('True: {}'.format(true_labels_batch[j]))
+        plt.axis('off')
+
+    batch_index += batch_size
+
+plt.show()
+################################################################################################################################################################################################
+
